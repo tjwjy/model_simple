@@ -102,10 +102,10 @@ class Model_base():
 
 class HomeOrWork_Model(Model_base):
     def get_next_position(self,L_place,postion,t):
-        #choose pro is correlated to the d as
+        #choose probality is correlated to the d as
         #p = size / pow(d.beta)
         #size is the point weight
-        #d equal to distance
+        #d equal to distance from position and next position
         beta=self.args_step[0]
 
         #temp value to store the probability of next point
@@ -194,6 +194,10 @@ class HomeOrWork_Model(Model_base):
 
 class Commute_Model(Model_base):
     def get_next_position(self,L_place,position1,position2,t):
+        #choose probality is correlated to the d as
+        #p = size / pow(d.beta)
+        #size is the point weight
+        #d equal to distance from position1 and next position + position2 and next position
         # 概率p=size/pow(d.beta)
         beta = self.args_step[0]
 
@@ -282,6 +286,10 @@ class Commute_Model(Model_base):
         # print (datetime.now()-a)
         return L_tempPlace,mid
 class HomeOrWork_Model_repeat(Model_base):
+    # in this model ,L_place (store the place has not visit) is stable
+    # equal to the Environment
+    # so that the people can visit the place they visit before when in explore state
+    # Commute_Model del the visited place in the L_place,making people can not visit visited place when exploring
     def get_next_position(self,L_place,postion,t):
         #choose pro is correlated to the d as
         #p = size / pow(d.beta)
@@ -321,7 +329,7 @@ class HomeOrWork_Model_repeat(Model_base):
             return 0
 
     def get_route(self,temp_position):
-        a=datetime.now()
+        #temp_position choose the position starting states is home or work
         mid=data_mid.data_mid(self.Envir,0)
         L_place = self.Envir.PointList
         L_tempPlace = self.visited_Place  # 访问的集合
@@ -358,13 +366,13 @@ class HomeOrWork_Model_repeat(Model_base):
                                      weight=position.weight)
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
-        # for tempPlace in L_tempPlace:
-            # self.ids.append(tempPlace.ID)
-        # print (datetime.now()-a)
-        # print (001)
         return L_tempPlace,mid
 
 class Commute_Model_repeat(Model_base):
+    # in this model ,L_place (store the place has not visit) is stable
+    # equal to the Environment
+    # so that the people can visit the place they visit before when in explore state
+    # Commute_Model del the visited place in the L_place,making people can not visit visited place when exploring
     def get_next_position(self,L_place,position1,position2,t):
         # 概率p=size/pow(d.beta)
         beta = self.args_step[0]
@@ -426,6 +434,99 @@ class Commute_Model_repeat(Model_base):
             if (tag > tag2):
                 # 这时候去探索新的场所代码
                 next_postion = self.get_next_position(L_place,position1=self.HomePosition,position2=self.WorkPosition,t=self.ts[index])
+                if (next_postion == 0):
+                    continue
+                position = next_postion
+                ##更新当前坐标
+                L_tempPlace.append(position)
+                S = S + 1
+                index = index + 1
+            else:
+                position = random.choice(L_tempPlace)
+                L_tempPlace.append(position)
+                index = index + 1
+            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
+                                     weight=position.weight)
+            mid.route.append(temp_point)
+        return L_tempPlace,mid
+
+class HomeOrWork_Model_repeat2(HomeOrWork_Model_repeat):
+    # change the distance cal method
+    # choose the position people stand and the next postion as the distance cal target
+    # HomeOrWork_Model_repeat choose home/work place and next positon as the cal target
+    def get_route(self,temp_position):
+        mid=data_mid.data_mid(self.Envir,0)
+        L_place = self.Envir.PointList
+        L_tempPlace = self.visited_Place  # 访问的集合
+
+        gama = self.args_model[1]
+        r = self.args_model[0]
+        # 随机选择起始点，并初始化所要用到的循环数据
+        position=temp_position
+        L_tempPlace.append(position)
+        temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        mid.route.append(temp_point)
+        S = self.get_count(L_tempPlace)
+        index = 1
+
+        while ((self.t_now < self.t_end) & (index < len(self.ts)-1 )):
+            tag = r * S ** (gama)
+            tag2 = random.random()
+            if (tag > tag2):
+                # c=0
+                # 这时候去探索新的场所代码
+                next_postion = self.get_next_position(L_place,postion=position,t=self.ts[index])
+                if (next_postion == 0):
+                    continue
+                position = next_postion
+                #更新当前坐标
+                L_tempPlace.append(position)
+                S = S + 1
+                index = index + 1
+            else:
+                position = random.choice(L_tempPlace)
+                L_tempPlace.append(position)
+                index = index + 1
+            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
+                                     weight=position.weight)
+            mid.route.append(temp_point)
+            self.t_now = self.t_now + self.ts[index]
+        # for tempPlace in L_tempPlace:
+            # self.ids.append(tempPlace.ID)
+        # print (datetime.now()-a)
+        # print (001)
+        return L_tempPlace,mid
+
+class Commute_Model_repeat2(Commute_Model_repeat):
+    # change the distance cal method
+    # choose the position people stand ,home/work place
+    # and the next postion as the distance cal target
+    # Commute_Model_repeat choose both home and work place and next positon as the cal target
+    def get_route(self,temp_position):
+        a=datetime.now()
+        mid=data_mid.data_mid(self.Envir,0)
+        L_place = self.Envir.PointList
+        L_tempPlace = self.visited_Place  # 访问的集合
+
+        gama = self.args_model[1]
+        r = self.args_model[0]
+        # 随机选择起始点，并初始化所要用到的循环数据
+        position=temp_position
+        L_tempPlace.append(position)
+        temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        mid.route.append(temp_point)
+        S = self.get_count(L_tempPlace)
+        index = 1
+        while ((self.t_now < self.t_end) & (index < len(self.ts)-1)):
+            tag = r * S ** (gama)
+            tag2 = random.random()
+            if (tag > tag2):
+                # 这时候去探索新的场所代码
+                if(temp_position==self.HomePosition):
+                    next_postion = self.get_next_position(L_place,position1=position,position2=self.WorkPosition,t=self.ts[index])
+                else:
+                    next_postion = self.get_next_position(L_place, position1=position, position2=self.HomePosition,
+                                                          t=self.ts[index])
                 if (next_postion == 0):
                     continue
                 position = next_postion

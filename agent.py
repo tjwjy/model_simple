@@ -119,7 +119,7 @@ class Nomal_Individual(Individual):
         self.set_args(args_model, args_step, args_t, simulate_time)
         self.data_mid=data_mid.data_mid(environment,person_tag=0)
         self.set_home_loc()
-        self.set_work_loc(beta=1.3)
+        self.set_work_loc(beta=args_step[0])
         self.home_locationList =[]
         self.work_locatonList = []
         self.commute_LocationList = []

@@ -5,8 +5,8 @@ import Point
 import IO
 import time
 args_model=[0.6,-0.21]
-args_time=[2,1,10000]
-args_steps=[-1.80,5]
+args_time=[2,1]
+args_steps=[2.3]
 
 def dis_func1(Point1,Point2):
     r2=(Point1.x-Point2.x)*(Point1.x-Point2.x)+(Point1.y-Point2.y)*(Point1.y-Point2.y)
