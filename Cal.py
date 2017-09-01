@@ -47,5 +47,23 @@ class Cal_agent():
             lastpoint=point
         return disList
 
+    def get_Rog(self,norepeat_PointList):
+        locationlist=norepeat_PointList
+        list2=np.unique(locationlist)
+        x=0
+        y=0
+        for location in locationlist:
+            x+=location[0]
+            y+=location[1]
+        x=x/len(locationlist)
+        y=y/len(locationlist)
+        x2=0
+        y2=0
+        for location in locationlist:
+            x2+=(location[0]-x)*(location[0]-x)
+            y2+=(location[1]-y)*(location[1]-y)
+        r=math.sqrt((x2+y2)/(len(locationlist)))
+        return r
+
 
 

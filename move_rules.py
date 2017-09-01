@@ -277,7 +277,7 @@ class Commute_Model(Model_base):
                 position = random.choice(L_tempPlace)
                 L_tempPlace.append(position)
                 index = index + 1
-            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
+            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
@@ -445,7 +445,7 @@ class Commute_Model_repeat(Model_base):
                 position = random.choice(L_tempPlace)
                 L_tempPlace.append(position)
                 index = index + 1
-            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
+            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
             mid.route.append(temp_point)
         return L_tempPlace,mid
@@ -538,7 +538,7 @@ class Commute_Model_repeat2(Commute_Model_repeat):
                 position = random.choice(L_tempPlace)
                 L_tempPlace.append(position)
                 index = index + 1
-            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
+            temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]

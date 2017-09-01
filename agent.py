@@ -180,6 +180,7 @@ class Nomal_Individual(Individual):
             if(t_now>self.rest_time[0] or t_now<self.rest_time[1]):
                 t_now=self.rest_time[1]
                 simulate_time+=1
+                self.data_mid.route[len(self.data_mid.route)-1].state=4
                 #print (simulate_time)
                 #sleep
 
