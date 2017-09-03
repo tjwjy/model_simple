@@ -35,7 +35,7 @@ class IO():
                 if (lg):
                     for i, item in enumerate(self.mid.Envir.PointList):
                         temp_str = str(item.x) + " " + str(item.y) + " " + str(
-                            item.ID) + " " + str(item.state) + " " + str(item.weight) + " "+str(item.gridID[0])+" "+str(item.gridID[1])+"\n"
+                            item.ID) + " " + str(item.state) + " " + str(item.weight) + " "+str(item.gridID[0])+" "+str(item.gridID[1])+" "+str(item.t)+"\n"
                         f.writelines(temp_str)
                 f.writelines('0\n')
         with (open(path, 'a+')) as f:
@@ -57,7 +57,7 @@ class IO():
                 for i,item in enumerate(self.mid.route):
                     temp_str = str(item.x) + " " + str(item.y) + " " + str(
                         item.ID) + " " + str(item.state) + " " + str(item.weight) + " " + str(
-                        item.gridID[0]) + " " + str(item.gridID[1]) + "\n"
+                        item.gridID[0]) + " " + str(item.gridID[1]) +" "+str(item.t)+ "\n"
                     f.writelines(temp_str)
             f.writelines('0\n')
 
@@ -91,6 +91,7 @@ class IO():
                     weight=float(temp_str[4])
                     gridID1=int(temp_str[5])
                     gridID2=int(temp_str[6])
+                    t=float(temp_str[7])
                     #t=float(temp_str[6])
                     point=Point.Point(tempx,tempy,ID=ID,state=state,weight=weight,gridid=(gridID1,gridID2))
                     temp_route.append(point)
@@ -128,7 +129,7 @@ class IO():
                         weight = float(temp_str[4])
                         gridID1 = int(temp_str[5])
                         gridID2=int(temp_str[6])
-                       # t=float(temp_str[6])
+                        t=float(temp_str[7])
                         point = Point.Point(tempx, tempy, gridid=(gridID1,gridID2), ID=ID, state=state, weight=weight)
                         temp_route2.append(point)
                     else:

@@ -53,15 +53,15 @@ class Cal_agent():
         x=0
         y=0
         for location in locationlist:
-            x+=location[0]
-            y+=location[1]
+            x+=location.x
+            y+=location.y
         x=x/len(locationlist)
         y=y/len(locationlist)
         x2=0
         y2=0
         for location in locationlist:
-            x2+=(location[0]-x)*(location[0]-x)
-            y2+=(location[1]-y)*(location[1]-y)
+            x2+=(location.x-x)*(location.x-x)
+            y2+=(location.y-y)*(location.y-y)
         r=math.sqrt((x2+y2)/(len(locationlist)))
         return r
 

@@ -63,6 +63,7 @@ class Model_base():
         L_tempPlace.append(postion)
         temp_point = Point.Point(postion.location, postion.gridID, postion.ID, t=self.t_now, state=3,
                                  weight=postion.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         self.start_position = postion
         S = self.get_count(L_tempPlace)
@@ -86,6 +87,7 @@ class Model_base():
                 L_tempPlace.append(postion)
                 index = index + 1
             temp_point=Point.Point(postion.location,postion.gridID,postion.ID,t=self.t_now,state=0,weight=postion.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         # for tempPlace in L_tempPlace:
@@ -159,6 +161,7 @@ class HomeOrWork_Model(Model_base):
             L_place.remove(position)
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -184,6 +187,7 @@ class HomeOrWork_Model(Model_base):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
                                      weight=position.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         # for tempPlace in L_tempPlace:
@@ -256,6 +260,7 @@ class Commute_Model(Model_base):
             L_place.remove(position)
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -279,6 +284,7 @@ class Commute_Model(Model_base):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         # for tempPlace in L_tempPlace:
@@ -340,6 +346,7 @@ class HomeOrWork_Model_repeat(Model_base):
         position=temp_position
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -364,6 +371,7 @@ class HomeOrWork_Model_repeat(Model_base):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
                                      weight=position.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         return L_tempPlace,mid
@@ -425,6 +433,7 @@ class Commute_Model_repeat(Model_base):
         position=temp_position
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -447,6 +456,7 @@ class Commute_Model_repeat(Model_base):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
         return L_tempPlace,mid
 
@@ -465,6 +475,7 @@ class HomeOrWork_Model_repeat2(HomeOrWork_Model_repeat):
         position=temp_position
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -489,6 +500,7 @@ class HomeOrWork_Model_repeat2(HomeOrWork_Model_repeat):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=3,
                                      weight=position.weight)
+            temp_point.t = self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         # for tempPlace in L_tempPlace:
@@ -514,6 +526,7 @@ class Commute_Model_repeat2(Commute_Model_repeat):
         position=temp_position
         L_tempPlace.append(position)
         temp_point = Point.Point(position.x, position.y, gridid=position.gridID,ID=position.ID,state=3,weight=position.weight)
+        temp_point.t = self.t_now
         mid.route.append(temp_point)
         S = self.get_count(L_tempPlace)
         index = 1
@@ -540,6 +553,7 @@ class Commute_Model_repeat2(Commute_Model_repeat):
                 index = index + 1
             temp_point = Point.Point(position.x, position.y, gridid=position.gridID, ID=position.ID, state=2,
                                      weight=position.weight)
+            temp_point.t=self.t_now
             mid.route.append(temp_point)
             self.t_now = self.t_now + self.ts[index]
         # for tempPlace in L_tempPlace:
