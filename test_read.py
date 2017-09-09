@@ -1,8 +1,7 @@
-import Environment
 import powerlaw
 import IO
 import matplotlib.pyplot as plt
-import math
+import seaborn as sbn
 import Cal
 read=IO.IO()
 data_mid=read.read_txt('D:\\temp_home.txt')

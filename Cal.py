@@ -64,6 +64,28 @@ class Cal_agent():
             y2+=(location.y-y)*(location.y-y)
         r=math.sqrt((x2+y2)/(len(locationlist)))
         return r
+    def cal_OD(self,point1,point2,PointList):
+        # if(point1 not in self.Envir.PointList):
+        #     raise Exception("The OD have points not in Environment")
+        # if(point2 not in self.Envir.PointList):
+        #     raise Exception ("The OD have points not in Environment")
+        ODlist=[]
+        for i in range(len(PointList)-1):
+            if(point1==PointList[i].ID):
+                if(PointList[i+1].ID==point2):
+                    ODlist.append([PointList[i],PointList[i+1]])
+        return ODlist
+    def cal_OD_24hours_disput(self,ODlist):
+        if ODlist:
+            t_list=[0]*25
+            for OD in ODlist:
+                t=OD[0].t
+                t_int=int(t)
+                t_list[t_int]+=1
+            return t_list
+        else:
+            raise Exception("there is no t_list")
+
 
 
 

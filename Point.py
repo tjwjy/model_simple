@@ -11,7 +11,9 @@ class Point():
 
 class Grid():
     def __init__(self,Point_List,dimension_x,dimension_y=0):
+        self.PointList=Point_List
         self.dimension_x=dimension_x
+
         if(dimension_y==0):
             self.dimension_y=dimension_x
         else:

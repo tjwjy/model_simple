@@ -458,6 +458,7 @@ class Commute_Model_repeat(Model_base):
                                      weight=position.weight)
             temp_point.t = self.t_now
             mid.route.append(temp_point)
+            self.t_now = self.t_now + self.ts[index]
         return L_tempPlace,mid
 
 class HomeOrWork_Model_repeat2(HomeOrWork_Model_repeat):
