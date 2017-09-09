@@ -1,6 +1,7 @@
 import Environment
 import Point
 import IO
+import IO_shp
 import math
 def dis_func1(Point1,Point2):
     r2=(Point1.x-Point2.x)*(Point1.x-Point2.x)+(Point1.y-Point2.y)*(Point1.y-Point2.y)
@@ -8,7 +9,7 @@ def dis_func1(Point1,Point2):
 path="E:/data/shenzhen/shenzhen.mdb"
 name="shenzhen_random_split"
 field=[]
-io_dealer=IO.IO()
+io_dealer=IO_shp.IO()
 xy_list=io_dealer.read_shp(path=path,name=name,fied_list=field)
 Point_List=[]
 for i,xy in enumerate(xy_list):

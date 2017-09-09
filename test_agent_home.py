@@ -2,6 +2,7 @@ import Environment
 import agent
 import math
 import Point
+import IO_shp
 import IO
 import time
 args_model=[0.6,-0.21]
@@ -14,7 +15,7 @@ def dis_func1(Point1,Point2):
 path="E:/data/shenzhen/shenzhen.mdb"
 name="shenzhen_random_split"
 field=["PN_INHABIT"]
-io_dealer=IO.IO()
+io_dealer=IO_shp.IO()
 xy_list=io_dealer.read_shp(path=path,name=name,fied_list=field)
 Point_List=[]
 
