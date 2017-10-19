@@ -71,7 +71,7 @@ class Nomal_Individual(Individual):
             weight=[]
             weight_sum=0
             for point in self.Envir.PointList:
-                weight_sum+=point.weight
+                weight_sum+=point.weight2
                 weight.append([point,weight_sum])
             p_random=random.uniform(0,weight_sum)
             for item in weight:
@@ -90,7 +90,7 @@ class Nomal_Individual(Individual):
                 j=max(p.ID,self.home_loc.ID)
                 if(i-j):
                     dis=self.Envir.dis_dict[(i,j)]
-                    temp_weight=float(p.weight)/math.pow(dis,beta)
+                    temp_weight=float(p.weight2)/math.pow(dis,beta)
                     weight_sum=weight_sum+temp_weight
                     weight.append([weight_sum,p])
             p_random = random.uniform(0, weight_sum)
@@ -114,7 +114,7 @@ class Nomal_Individual(Individual):
         self.speed=30000
         self.Envir=Environment.Envronment([],1)
         self.Envir.copy_environment(environment)
-        if(environment.dis_dict):
+        if(not environment.dis_dict):
             self.Envir.cal_dis_dict(self.Envir.dis_func1)
         self.set_args(args_model, args_step, args_t, simulate_time)
         self.data_mid=data_mid.data_mid(environment,person_tag=0)
@@ -169,7 +169,7 @@ class Nomal_Individual(Individual):
                     self.commute_LocationList,tempRoute = temp_Model.get_route(self.work_loc)
                     t_now = temp_Model.t_now
                     self.data_mid.add_location(tempRoute.route)
-                if(t_now<self.rest_time[0]):
+                while(t_now<self.rest_time[0]):
                     temp_Model = move_rules.HomeOrWork_Model(self.args_model,self.Envir,self.home_loc,self.work_loc,self.home_locationList)
                     temp_Model.set_t_constraint(t_now=t_now, t_end=self.rest_time[0],args_t=self.args_t)
                     temp_Model.set_space_constrain(self.speed, self.args_step)
@@ -180,7 +180,6 @@ class Nomal_Individual(Individual):
             if(t_now>self.rest_time[0] or t_now<self.rest_time[1]):
                 t_now=self.rest_time[1]
                 simulate_time+=1
-                self.data_mid.route[len(self.data_mid.route)-1].state=4
                 #print (simulate_time)
                 #sleep
 
@@ -268,8 +267,66 @@ class Nomal_Individual(Individual):
                     self.commute_LocationList, tempRoute = temp_Model.get_route(self.work_loc)
                     t_now = temp_Model.t_now
                     self.data_mid.add_location(tempRoute.route)
-                if (t_now < self.rest_time[0]):
+                while (t_now < self.rest_time[0]):
                     temp_Model = move_rules.HomeOrWork_Model_repeat(self.args_model, self.Envir, self.home_loc, self.work_loc,
+                                                             self.home_locationList)
+                    temp_Model.set_t_constraint(t_now=t_now, t_end=self.rest_time[0], args_t=self.args_t)
+                    temp_Model.set_space_constrain(self.speed, self.args_step)
+                    self.home_locationList, tempRoute = temp_Model.get_route(self.home_loc)
+                    t_now = temp_Model.t_now
+                    self.data_mid.add_location(tempRoute.route)
+                    # do things commute and then do things around home
+            if (t_now > self.rest_time[0] or t_now < self.rest_time[1]):
+                t_now = self.rest_time[1]
+                simulate_time += 1
+                # print (simulate_time)
+
+
+    def simulate_repeat2(self):
+        print ([self.home_loc.x, self.home_loc.y])
+        print ([self.work_loc.x, self.work_loc.y])
+        simulate_time = 0
+        while (simulate_time < self.simulate_time):
+            self.set_work_time()
+            self.set_rest_time()
+            t_now = self.rest_time[1]
+            if (t_now < self.work_time[0] and t_now >= self.rest_time[1]):
+                # pass
+                temp_Model = move_rules.Commute_Model_repeat2(self.args_model, environment=self.Envir,
+                                                      homeposition=self.home_loc, workposition=self.work_loc,
+                                                      visited_Place=self.commute_LocationList)
+                temp_Model.set_t_constraint(t_now=t_now, t_end=self.work_time[0], args_t=self.args_t)
+                temp_Model.set_space_constrain(self.speed, self.args_step)
+                self.commute_LocationList, tempRoute = temp_Model.get_route(self.home_loc)
+                self.data_mid.add_location(tempRoute.route)
+                t_now = temp_Model.t_now
+                # do things commute
+                # parameter is t_now and work_time[0]
+            if (t_now > self.work_time[0] and t_now < self.work_time[1]):
+                # pass
+                temp_Model = move_rules.HomeOrWork_Model_repeat2(self.args_model, self.Envir, self.home_loc, self.work_loc,
+                                                         self.work_locatonList)
+                temp_Model.set_t_constraint(t_now=t_now, t_end=self.work_time[1], args_t=self.args_t)
+                temp_Model.set_space_constrain(self.speed, self.args_step)
+                self.work_locatonList, tempRoute = temp_Model.get_route(self.work_loc)
+                self.data_mid.add_location(tempRoute.route)
+                t_now = temp_Model.t_now
+                # do something around work
+            if (t_now > self.work_time[1] and t_now < self.rest_time[0]):
+                # pass
+                while (t_now < self.rest_time[0]):
+                    temp = random.random()
+                    if (temp < 0.9):
+                        break
+                    temp_Model = move_rules.Commute_Model_repeat2(self.args_model, self.Envir, self.home_loc, self.work_loc,
+                                                          self.commute_LocationList)
+                    temp_Model.set_t_constraint(t_now=t_now, t_end=t_now + 0.1, args_t=self.args_t)
+                    temp_Model.set_space_constrain(self.speed, self.args_step)
+                    self.commute_LocationList, tempRoute = temp_Model.get_route(self.work_loc)
+                    t_now = temp_Model.t_now
+                    self.data_mid.add_location(tempRoute.route)
+                while (t_now < self.rest_time[0]):
+                    temp_Model = move_rules.HomeOrWork_Model_repeat2(self.args_model, self.Envir, self.home_loc, self.work_loc,
                                                              self.home_locationList)
                     temp_Model.set_t_constraint(t_now=t_now, t_end=self.rest_time[0], args_t=self.args_t)
                     temp_Model.set_space_constrain(self.speed, self.args_step)

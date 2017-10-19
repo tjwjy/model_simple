@@ -8,6 +8,7 @@ class Point():
         self.state=state
         self.weight=weight
         self.t=0
+        self.weight2=0
 
 class Grid():
     def __init__(self,Point_List,dimension_x,dimension_y=0):

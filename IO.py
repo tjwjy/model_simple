@@ -1,7 +1,5 @@
 import Environment
 import Point
-from arcpy import env
-import arcpy
 import data_mid
 import pandas as pd
 
@@ -24,7 +22,7 @@ class IO():
                 if (lg):
                     for i, item in enumerate(self.mid.Envir.PointList):
                         temp_str = str(item.x) + " " + str(item.y) + " " + str(
-                            item.ID) + " " + str(item.state) + " " + str(item.weight) + " "+str(item.gridID[0])+" "+str(item.gridID[1])+" "+str(item.t)+"\n"
+                            item.ID) + " " + str(item.state) + " " + str(item.weight) + " "+str(item.gridID[0])+" "+str(item.gridID[1])+" "+str(item.t)++" "+str(item.weight2)+"\n"
                         f.writelines(temp_str)
                 f.writelines('0\n')
         with (open(path, 'a+')) as f:
@@ -44,9 +42,8 @@ class IO():
             lg=len(self.mid.route)
             if(lg):
                 for i,item in enumerate(self.mid.route):
-                    temp_str = str(item.x) + " " + str(item.y) + " " + str(
-                        item.ID) + " " + str(item.state) + " " + str(item.weight) + " " + str(
-                        item.gridID[0]) + " " + str(item.gridID[1]) +" "+str(item.t)+ "\n"
+                    temp_str =str(item.x) + " " + str(item.y) + " " + str(
+                            item.ID) + " " + str(item.state) + " " + str(item.weight) + " "+str(item.gridID[0])+" "+str(item.gridID[1])+" "+str(item.t)++" "+str(item.weight2)+"\n"
                     f.writelines(temp_str)
             f.writelines('0\n')
 
@@ -81,8 +78,9 @@ class IO():
                     gridID1=int(temp_str[5])
                     gridID2=int(temp_str[6])
                     t=float(temp_str[7])
-                    #t=float(temp_str[6])
+                    weight2=float(temp_str[8])
                     point=Point.Point(tempx,tempy,ID=ID,state=state,weight=weight,gridid=(gridID1,gridID2))
+                    point.weight2=weight2
                     point.t=t
                     temp_route.append(point)
                 else:
@@ -120,7 +118,9 @@ class IO():
                         gridID1 = int(temp_str[5])
                         gridID2=int(temp_str[6])
                         t=float(temp_str[7])
+                        weight2=float(temp_str[8])
                         point = Point.Point(tempx, tempy, gridid=(gridID1,gridID2), ID=ID, state=state, weight=weight)
+                        point.weight2=weight2
                         point.t=t
                         temp_route2.append(point)
                     else:
@@ -138,7 +138,7 @@ class IO():
             f.seek(offset)
             index_list=[]
             index_list2=[]
-            columns=['x','y','ID','state','weight','grid1','grid2','t']
+            columns=['x','y','ID','state','weight','grid1','grid2','t','weight2']
             value_list=[]
             temp_str = f.readline()
             while (temp_str):
@@ -172,7 +172,8 @@ class IO():
                         gridID1 = int(temp_str[5])
                         gridID2 = int(temp_str[6])
                         t = float(temp_str[7])
-                        value=[tempx,tempy,ID,state,weight,gridID1,gridID2,t]
+                        weight2=float(temp_str[8])
+                        value=[tempx,tempy,ID,state,weight,gridID1,gridID2,t,weight2]
                         value_list.append(value)
                         num+=1
                     else:
@@ -208,8 +209,10 @@ class IO():
                     gridID1 = int(temp_str[5])
                     gridID2 = int(temp_str[6])
                     t = float(temp_str[7])
+                    weight2=float(temp_str[8])
                     # t=float(temp_str[6])
                     point = Point.Point(tempx, tempy, ID=ID, state=state, weight=weight, gridid=(gridID1, gridID2))
+                    point.weight2=weight2
                     point.t = t
                     temp_route.append(point)
                 else:
@@ -219,7 +222,7 @@ class IO():
             temp_envir.cal_dis_dict(temp_envir.dis_func1)
         return temp_envir,offset
 
-    def read_txt_step(self,path,offset):
+    def read_txt_step(self,path,temp_envir,offset):
         if self.mid:
             self.mid = None
         temp_mid=[]
@@ -237,10 +240,10 @@ class IO():
                 temp = temp_str.rstrip('\n')
                 if not(temp=='0'):
                     temp = temp.split(" ")
-                    # for i in range(int(len(temp))):
-                    #     index=int(temp[i])
-                    #     point=temp_envir.PointList[index]
-                    #     important_loc.append(point)
+                    for i in range(int(len(temp))):
+                        index=int(temp[i])
+                        point=temp_envir.PointList[index]
+                        important_loc.append(point)
                 while (True):
                     temp_str = f.readline()
                     temp_str = temp_str.rstrip('\n')
@@ -254,7 +257,9 @@ class IO():
                         gridID1 = int(temp_str[5])
                         gridID2=int(temp_str[6])
                         t=float(temp_str[7])
+                        weight2=float(temp_str[8])
                         point = Point.Point(tempx, tempy, gridid=(gridID1,gridID2), ID=ID, state=state, weight=weight)
+                        point.weight2=weight2
                         point.t=t
                         temp_route2.append(point)
                     else:

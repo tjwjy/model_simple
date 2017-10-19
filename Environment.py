@@ -28,9 +28,8 @@ class Envronment():
     def cal_dis_dict(self,dis_function):
         for point in self.PointList:
             for point2 in self.PointList:
-                if(point.ID<point2.ID):
-                    temp_dis=dis_function(point,point2)
-                    self.dis_dict[(point.ID,point2.ID)]=temp_dis
+                temp_dis=dis_function(point,point2)
+                self.dis_dict[(point.ID,point2.ID)]=temp_dis
 
     def dis_func1(self,Point1, Point2):
         r2 = (Point1.x - Point2.x) * (Point1.x - Point2.x) + (Point1.y - Point2.y) * (Point1.y - Point2.y)

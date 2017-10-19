@@ -114,14 +114,12 @@ class HomeOrWork_Model(Model_base):
         psum = []
         temp_sum = 0
         temp_position=[]
-        max_dis=t*self.speed
         for p in L_place:
             i=min(p.ID,postion.ID)
             j=max(p.ID,postion.ID)
             if(i-j==0):
                 continue
-            if(self.Envir.dis_dict[(i,j)]<=max_dis):
-                temp_position.append([p,self.Envir.dis_dict[(i,j)]])
+            temp_position.append([p,self.Envir.dis_dict[(i,j)]])
             # temp_dis=self.dis_func1(p,postion)
             # if(temp_dis<max_dis):
             #     temp_position.append([p,temp_dis])
@@ -209,7 +207,6 @@ class Commute_Model(Model_base):
         temp_sum = 0
         temp_position = []
         #t is the next 2 t sum
-        max_dis = t * self.speed
         # 在半径内的所有满足条件的x，y之差
         for p in L_place:
             #cal the ellipse radius and cal the min,
@@ -224,8 +221,7 @@ class Commute_Model(Model_base):
                 continue
             dis2=self.Envir.dis_dict[(i, k)]
             temp_dis=dis1*dis1+dis2*dis2
-            if ( temp_dis<= max_dis*max_dis):
-                temp_position.append([p, temp_dis])
+            temp_position.append([p, temp_dis])
         for t_p in temp_position:
             if (t_p[1] > 0):
                 p = t_p[0].weight/math.pow(t_p[1], beta)
@@ -307,14 +303,12 @@ class HomeOrWork_Model_repeat(Model_base):
         psum = []
         temp_sum = 0
         temp_position=[]
-        max_dis=t*self.speed
         for p in L_place:
             i=min(p.ID,postion.ID)
             j=max(p.ID,postion.ID)
             if(i-j==0):
                 continue
-            if(self.Envir.dis_dict[(i,j)]<=max_dis):
-                temp_position.append([p,self.Envir.dis_dict[(i,j)]])
+            temp_position.append([p,self.Envir.dis_dict[(i,j)]])
             # temp_dis=self.dis_func1(p,postion)
             # if(temp_dis<max_dis):
             #     temp_position.append([p,temp_dis])
@@ -389,7 +383,6 @@ class Commute_Model_repeat(Model_base):
         temp_sum = 0
         temp_position = []
         #t is the next 2 t sum
-        max_dis = t * self.speed
         # 在半径内的所有满足条件的x，y之差
         for p in L_place:
             #cal the ellipse radius and cal the min,
@@ -404,8 +397,7 @@ class Commute_Model_repeat(Model_base):
                 continue
             dis2=self.Envir.dis_dict[(i, k)]
             temp_dis=dis1*dis1+dis2*dis2
-            if ( temp_dis<= max_dis*max_dis):
-                temp_position.append([p, temp_dis])
+            temp_position.append([p, temp_dis])
         for t_p in temp_position:
             if (t_p[1] > 0):
                 p = t_p[0].weight/math.pow(t_p[1], beta)
